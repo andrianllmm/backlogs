@@ -1,0 +1,53 @@
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 50rem;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.underline-hover {
+  text-decoration: none;
+}
+
+.underline-hover:hover {
+  text-decoration: underline;
+}
+
+.link-unstyled,
+.link-unstyled:link,
+.link-unstyled:hover {
+  color: inherit;
+  text-decoration: inherit;
+}
+
+.btn-unstyled,
+.btn-unstyled:hover,
+.btn-unstyled:active,
+.btn-unstyled:focus {
+  background-color: transparent;
+  border: none;
+  outline: none;
+  box-shadow: none;
+}
+
+.input-unstyled,
+.input-unstyled:hover,
+.input-unstyled:active,
+.input-unstyled:focus {
+  background-color: transparent;
+  border: none;
+  outline: none;
+  border-radius: 0%;
+  box-shadow: none;
+  padding: 0;
+}
