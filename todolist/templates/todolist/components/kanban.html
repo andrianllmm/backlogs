@@ -1,0 +1,10 @@
+{% load todolist_tags %}
+<div class="kanban-container row justify-content-center gap-3">
+    {% for status in statuses %}
+        <div class="kanban-column col p-2 rounded-3"
+             data-status="{{ status.value }}">
+            <h5 class="mb-3">{{ status.label }}</h5>
+            {% include "todolist/components/tasks_list.html" with tasks=tasks|filter_tasks:status.value status=status.value %}
+        </div>
+    {% endfor %}
+</div>

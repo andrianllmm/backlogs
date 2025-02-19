@@ -1,5 +1,6 @@
 from django.db.models import F
 from django.shortcuts import render, redirect, get_object_or_404
+from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from .models import Task
 from users.models import User
@@ -26,10 +27,18 @@ def index(request):
     tasks = Task.objects.select_related("assignee").order_by(
         "status", F("due_date").desc(nulls_last=True)
     )
+    statuses = [
+        {"label": choice[1], "value": choice[0]} for choice in Task.Status.choices
+    ]
     return render(
         request,
         "todolist/index.html",
-        {"tasks": tasks, "add_form": add_form, "update_form": update_form},
+        {
+            "tasks": tasks,
+            "add_form": add_form,
+            "update_form": update_form,
+            "statuses": statuses,
+        },
     )
 
 

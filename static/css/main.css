@@ -51,3 +51,10 @@
   box-shadow: none;
   padding: 0;
 }
+
+.cursor-pointer {
+  cursor: pointer;
+}
+.cursor-grab {
+  cursor: grab;
+}

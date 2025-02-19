@@ -1,4 +1,4 @@
-<div class="card">
+<div class="kanban-task card cursor-grab" draggable="true">
     <div class="card-body d-flex gap-1">
         {% comment %} Checkbox to update status {% endcomment %}
         <form action="{% url 'todolist:update' pk=task.id %}" method="post">
@@ -32,4 +32,14 @@
             </ul>
         </div>
     </div>
+    {% comment %} Form for updating status {% endcomment %}
+    <form method="post"
+          action="{% url 'todolist:update' task.id %}"
+          class="status-form">
+        {% csrf_token %}
+        <input type="hidden"
+               name="status"
+               class="status-input"
+               value="{{ task.status }}">
+    </form>
 </div>

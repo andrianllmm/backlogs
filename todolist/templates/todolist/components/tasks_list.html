@@ -1,4 +1,6 @@
-<ul class="list-unstyled d-flex flex-column gap-2">
+<ul class="kanban-tasks list-unstyled d-flex flex-column gap-2 p-1 rounded-3"
+    style="min-height: 300px"
+    id="column-{{ status }}">
     {% for task in tasks %}
         <li class="p-0">
             {% comment %} Card {% endcomment %}
@@ -6,7 +8,5 @@
             {% comment %} Modal {% endcomment %}
             {% include "todolist/components/task_modal.html" with task=task form=form %}
         </li>
-    {% empty %}
-        <li class="p-0 text-center">No tasks found.</li>
     {% endfor %}
 </ul>

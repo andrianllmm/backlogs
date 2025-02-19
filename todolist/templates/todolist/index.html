@@ -3,6 +3,6 @@
 {% block main %}
     {% comment %} Add task {% endcomment %}
     <div class="mb-3">{% include "todolist/components/add_task_form.html" with form=add_form %}</div>
-    {% comment %} Task list {% endcomment %}
-    {% include "todolist/components/tasks_list.html" with tasks=tasks form=update_form %}
+    {% comment %} Kanban {% endcomment %}
+    {% include "todolist/components/kanban.html" with tasks=tasks statuses=statuses form=update_form %}
 {% endblock main %}
