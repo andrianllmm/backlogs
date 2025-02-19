@@ -1,0 +1,12 @@
+<ul class="list-unstyled d-flex flex-column gap-2">
+    {% for task in tasks %}
+        <li class="p-0">
+            {% comment %} Card {% endcomment %}
+            {% include "todolist/components/task_card.html" with task=task %}
+            {% comment %} Modal {% endcomment %}
+            {% include "todolist/components/task_modal.html" with task=task form=form %}
+        </li>
+    {% empty %}
+        <li class="p-0 text-center">No tasks found.</li>
+    {% endfor %}
+</ul>

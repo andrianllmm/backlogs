@@ -1,4 +1,8 @@
 {% extends "base.html" %}
+{% load widget_tweaks %}
 {% block main %}
-    <h1>Home</h1>
+    {% comment %} Add task {% endcomment %}
+    <div class="mb-3">{% include "todolist/components/add_task_form.html" with form=add_form %}</div>
+    {% comment %} Task list {% endcomment %}
+    {% include "todolist/components/tasks_list.html" with tasks=tasks form=update_form %}
 {% endblock main %}

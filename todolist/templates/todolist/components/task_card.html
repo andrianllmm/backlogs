@@ -1,0 +1,35 @@
+<div class="card">
+    <div class="card-body d-flex gap-1">
+        {% comment %} Checkbox to update status {% endcomment %}
+        <form action="{% url 'todolist:update' pk=task.id %}" method="post">
+            {% csrf_token %}
+            <!-- Hidden input ensures 0 is sent when unchecked -->
+            <input type="hidden" name="status" value={{ 0 }}>
+            <input type="checkbox"
+                   name="status"
+                   class="form-check-input mt-1 me-1 m-0"
+                   value="{{ 2 }}"
+                   onchange="this.form.submit()"
+                   {% if task.status == 2 %}checked{% endif %}>
+        </form>
+        {% comment %} Title that opens modal {% endcomment %}
+        <div class="d-flex flex-column align-items-start w-100">
+            <button type="button"
+                    class="card-title btn btn-unstyled underline-hover text-start m-0 p-0 w-100"
+                    data-bs-toggle="modal"
+                    data-bs-target="#modal-{{ task.id }}">{{ task.title }}</button>
+            {% if task.due_date %}<small class="text-muted">{{ task.due_date }}</small>{% endif %}
+        </div>
+        {% comment %} Dropdown menu {% endcomment %}
+        <div class="dropdown ms-auto">
+            <button type="button" class="btn btn-unstyled" data-bs-toggle="dropdown">
+                <i class="bi bi-three-dots-vertical"></i>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li>
+                    <button class="dropdown-item">Action</button>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
