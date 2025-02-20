@@ -1,6 +1,7 @@
-<nav class="navbar navbar-expand-lg">
+<nav class="navbar navbar-expand-lg mb-3">
     <div class="container-fluid">
         <a class="navbar-brand" href="{% url 'todolist:index' %}">Backlogs</a>
+        {% comment %} Navbar toggler button for mobile {% endcomment %}
         <button class="navbar-toggler"
                 type="button"
                 data-bs-toggle="collapse"
@@ -12,6 +13,44 @@
                 <li class="nav-item">
                     <a class="nav-link" href="#">Link</a>
                 </li>
+            </ul>
+            <ul class="navbar-nav ms-auto d-flex align-items-center gap-2">
+                {% if request.user.is_authenticated %}
+                    <!-- User dropdown -->
+                    <li class="nav-item">
+                        <div class="dropdown">
+                            <button class="btn btn-unstyled"
+                                    type="button"
+                                    data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                <i class="bi bi-person-circle"></i>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                    <span class="mx-3">{{ request.user.email }}</span>
+                                </li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li>
+                                    <a class="dropdown-item d-flex justify-content-between"
+                                       href="{% url 'auth:logout' %}">
+                                        Sign out
+                                        <i class="bi bi-box-arrow-left"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                {% else %}
+                    {% comment %} Sign in/up buttons {% endcomment %}
+                    <li class="nav-item">
+                        <a class="btn btn-sm btn-outline-primary" href="{% url 'auth:login' %}">Sign in</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-sm btn-primary" href="{% url 'auth:register' %}">Sign Up</a>
+                    </li>
+                {% endif %}
             </ul>
         </div>
     </div>

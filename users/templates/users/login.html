@@ -1,0 +1,27 @@
+{% extends "users/base.html" %}
+{% load widget_tweaks %}
+{% block form %}
+    <h1 class="mb-3">Sign in</h1>
+    <form action="{% url 'auth:login' %}"
+          method="post"
+          class="d-flex flex-column gap-2">
+        {% csrf_token %}
+        {% if form.non_field_errors %}
+            {% for error in form.non_field_errors %}<span class="text-danger">{{ error }}</span>{% endfor %}
+        {% endif %}
+        {% comment %} Email address {% endcomment %}
+        <div class="control-group">
+            {% render_field form.email class+="form-control" placeholder="Email address" autofocus="autofocus" %}
+            {% if form.email.errors %}<span class="text-danger">{{ form.email.errors.0 }}</span>{% endif %}
+        </div>
+        {% comment %} Password {% endcomment %}
+        <div class="control-group">
+            {% render_field form.password class+="form-control" placeholder="Password" autofocus="autofocus" %}
+            {% if form.password.errors %}<span class="text-danger">{{ form.password.errors.0 }}</span>{% endif %}
+        </div>
+        <button type="submit" class="btn btn-primary">Sign in</button>
+    </form>
+    <p class="my-3">
+        Don't have an account? <a href="{% url 'auth:register' %}">Sign up</a>
+    </p>
+{% endblock form %}

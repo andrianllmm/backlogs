@@ -1,0 +1,30 @@
+{% extends "users/base.html" %}
+{% load widget_tweaks %}
+{% block form %}
+    <h1 class="mb-3">Sign up</h1>
+    <form action="{% url 'auth:register' %}"
+          method="post"
+          class="d-flex flex-column gap-2">
+        {% csrf_token %}
+        {% if form.non_field_errors %}<span class="text-danger">{{ form.non_field_errors.0 }}</span>{% endif %}
+        {% comment %} Email address {% endcomment %}
+        <div class="control-group">
+            {% render_field form.email class+="form-control" placeholder="Email address" autofocus="autofocus" %}
+            {% if form.email.errors %}<span class="text-danger">{{ form.email.errors.0 }}</span>{% endif %}
+        </div>
+        {% comment %} Password {% endcomment %}
+        <div class="control-group">
+            {% render_field form.password1 class+="form-control" placeholder="Password" autofocus="autofocus" %}
+            {% if form.password1.errors %}<span class="text-danger">{{ form.password1.errors.0 }}</span>{% endif %}
+        </div>
+        {% comment %} Confirm password {% endcomment %}
+        <div class="control-group">
+            {% render_field form.password2 class+="form-control" placeholder="Confirm Password" autofocus="autofocus" %}
+            {% if form.password2.errors %}<span class="text-danger">{{ form.password2.errors.0 }}</span>{% endif %}
+        </div>
+        <button type="submit" class="btn btn-primary">Sign up</button>
+    </form>
+    <p class="my-3">
+        Already have an account? <a href="{% url 'auth:login' %}">Sign in</a>
+    </p>
+{% endblock form %}
