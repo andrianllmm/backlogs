@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django.contrib.humanize",
     "debug_toolbar",
     "widget_tweaks",
     "todolist",
@@ -142,3 +143,7 @@ AUTH_USER_MODEL = "users.User"
 
 
 LOGIN_URL = "/login/"
+
+
+TIME_ZONE = "Asia/Manila"
+USE_TZ = True

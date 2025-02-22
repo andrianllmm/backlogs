@@ -1,6 +1,6 @@
+from django.contrib.auth.decorators import login_required
 from django.db.models import F
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from .models import Task
 from .forms import AddTaskForm, UpdateTaskForm
@@ -25,7 +25,7 @@ def index(request):
     tasks = (
         Task.objects.filter(assignee=request.user)
         .select_related("assignee")
-        .order_by("status", F("due_date").desc(nulls_last=True))
+        .order_by("status", F("due_date").asc(nulls_last=True))
     )
     statuses = [
         {"label": choice[1], "value": choice[0]} for choice in Task.Status.choices

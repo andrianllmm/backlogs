@@ -14,7 +14,10 @@
                                 <option value="{{ value }}" {% if value == task.status %}selected{% endif %}>{{ label }}</option>
                             {% endfor %}
                         </select>
-                        {% render_field form.due_date type="date" class+="form-control" value=task.due_date %}
+                        <input name="{{ form.due_date.name }}"
+                               type="datetime-local"
+                               class="form-control"
+                               value="{{ task.due_date|date:'Y-m-d' }}T{{ task.due_date|time:'H:i' }}">
                     </div>
                     <button type="button"
                             class="btn-close"
@@ -26,7 +29,7 @@
                     <textarea name="{{ form.description.name }}"
                               class="form-control input-unstyled"
                               placeholder="Task description"
-                              rows="3">{{ task.description }}</textarea>
+                              rows="3">{% if task.description %}{{ task.description }}{% endif %}</textarea>
                 </div>
                 <div class="modal-footer">
                     <button type="submit"

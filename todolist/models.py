@@ -1,5 +1,6 @@
 from django.db import models
 from users.models import User
+from django.utils import timezone
 
 
 class Task(models.Model):
@@ -15,6 +16,9 @@ class Task(models.Model):
     assignee = models.ForeignKey(User, on_delete=models.CASCADE, related_name="tasks")
     created_date = models.DateTimeField(auto_now_add=True)
     modified_date = models.DateTimeField(auto_now=True)
+
+    def is_overdue(self):
+        return self.due_date < timezone.now()
 
     def __str__(self):
         return f"{self.title} ({self.assignee})"

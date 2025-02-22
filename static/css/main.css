@@ -52,6 +52,10 @@
   padding: 0;
 }
 
+.text-transparent {
+  color: transparent;
+}
+
 .cursor-pointer {
   cursor: pointer;
 }

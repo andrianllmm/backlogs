@@ -1,13 +1,19 @@
 {% load widget_tweaks %}
-<form action="{% url 'todolist:index' %}" method="post">
+<form action="{% url 'todolist:index' %}" method="post" id="add-task-form">
     {% csrf_token %}
     <div class="d-flex gap-2">
         {% comment %} Title {% endcomment %}
         <div class="control-group w-100">
-            {% render_field form.title class+="form-control w-100" placeholder="Add task" autofocus="autofocus" %}
+            <div class="position-relative w-100">
+                <div id="add-task-title-field-overlay"
+                     class="form-control position-absolute w-100 h-100 text-transparent overflow-hidden"></div>
+                {% render_field form.title id="add-task-title-field" class+="form-control position-relative bg-transparent" placeholder="Add task" autofocus="autofocus" %}
+            </div>
         </div>
         {% comment %} Date {% endcomment %}
-        <div class="control-group">{% render_field form.due_date type="date" class+="form-control" %}</div>
+        <div class="control-group">
+            {% render_field form.due_date type="datetime-local" id="add-task-due-date-field" class+="form-control" %}
+        </div>
         <button type="submit" class="btn btn-outline-secondary">+</button>
     </div>
 </form>
