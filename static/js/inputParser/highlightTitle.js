@@ -1,9 +1,27 @@
-export default function highlightTitle(title, matches) {
+export default function highlightTitle(
+  title,
+  matches,
+  highlightClassname = 'bg-primary rounded'
+) {
   const highlightedTitle = document.createDocumentFragment();
-  const highlightClassname = 'bg-primary rounded';
   let lastIndex = 0;
 
-  matches.forEach(({ match }) => {
+  matches.forEach(({ match, type }) => {
+    switch (type) {
+      case 'low':
+        highlightClassname = 'bg-info rounded';
+        break;
+      case 'medium':
+        highlightClassname = 'bg-warning rounded';
+        break;
+      case 'high':
+        highlightClassname = 'bg-danger rounded';
+        break;
+      default:
+        highlightClassname = 'bg-primary rounded';
+        break;
+    }
+
     const matchedText = match[0];
 
     if (match.index > lastIndex) {

@@ -5,13 +5,13 @@ from .models import Task
 class AddTaskForm(forms.ModelForm):
     class Meta:
         model = Task
-        fields = ["title", "due_date"]
+        fields = ["title", "due_date", "priority"]
 
 
 class UpdateTaskForm(forms.ModelForm):
     class Meta:
         model = Task
-        fields = ["title", "description", "due_date", "status"]
+        fields = ["title", "description", "status", "due_date", "priority"]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

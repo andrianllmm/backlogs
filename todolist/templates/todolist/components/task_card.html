@@ -19,9 +19,14 @@
                     class="card-title btn btn-unstyled underline-hover text-start m-0 p-0 w-100"
                     data-bs-toggle="modal"
                     data-bs-target="#modal-{{ task.id }}">{{ task.title }}</button>
-            {% if task.due_date %}
-                <small class="{% if task.is_overdue %}text-danger{% else %}text-primary{% endif %}">{{ task.due_date|naturaltime }}</small>
-            {% endif %}
+            <div class="d-flex gap-1">
+                {% if task.priority %}
+                    <i class="bi bi-flag-fill {% if task.priority == 1 %}text-warning{% elif task.priority == 2 %}text-danger{% endif %}"></i>
+                {% endif %}
+                {% if task.due_date %}
+                    <small class="{% if task.is_overdue %}text-danger{% else %}text-primary{% endif %} ">{{ task.due_date|naturaltime }}</small>
+                {% endif %}
+            </div>
         </div>
         {% comment %} Dropdown menu {% endcomment %}
         <div class="dropdown ms-auto">

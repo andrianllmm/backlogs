@@ -14,6 +14,7 @@ def index(request):
             Task.objects.create(
                 title=add_form.cleaned_data.get("title"),
                 due_date=add_form.cleaned_data.get("due_date"),
+                priority=add_form.cleaned_data.get("priority"),
                 assignee=request.user,
             )
 
@@ -25,7 +26,7 @@ def index(request):
     tasks = (
         Task.objects.filter(assignee=request.user)
         .select_related("assignee")
-        .order_by("status", F("due_date").asc(nulls_last=True))
+        .order_by("status", "-priority", F("due_date").asc(nulls_last=True))
     )
     statuses = [
         {"label": choice[1], "value": choice[0]} for choice in Task.Status.choices

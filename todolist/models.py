@@ -9,10 +9,16 @@ class Task(models.Model):
         DOING = 1, "Doing"
         DONE = 2, "Done"
 
+    class Priority(models.IntegerChoices):
+        LOW = 0, "Low"
+        MEDIUM = 1, "Medium"
+        HIGH = 2, "High"
+
     title = models.CharField(max_length=255)
     description = models.TextField(null=True, blank=True)
     status = models.IntegerField(choices=Status.choices, default=Status.BACKLOG)
     due_date = models.DateTimeField(null=True, blank=True)
+    priority = models.IntegerField(choices=Priority.choices, default=Priority.LOW)
     assignee = models.ForeignKey(User, on_delete=models.CASCADE, related_name="tasks")
     created_date = models.DateTimeField(auto_now_add=True)
     modified_date = models.DateTimeField(auto_now=True)

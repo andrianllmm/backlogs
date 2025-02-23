@@ -14,6 +14,7 @@
         <div class="control-group">
             {% render_field form.due_date type="datetime-local" id="add-task-due-date-field" class+="form-control" %}
         </div>
+        <div class="control-group">{% render_field form.priority id="add-task-priority-field" class+="form-control" %}</div>
         <button type="submit" class="btn btn-outline-secondary">+</button>
     </div>
 </form>
