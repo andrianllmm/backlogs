@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login as auth_login, logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from .forms import LoginForm, RegisterForm
+from todolist.models import Task
+from datetime import datetime, time
 
 
 def login(request):
@@ -30,6 +32,13 @@ def register(request):
         if form.is_valid():
             user = form.save()
             auth_login(request, user)
+            Task.objects.create(
+                title="Try adding a task!",
+                description="Did it already? Tick the checkbox or drag it to the right!",
+                due_date=datetime.combine(datetime.today(), time(23, 59, 59)),
+                priority=0,
+                assignee=user,
+            )
             return redirect("todolist:index")
     else:
         form = RegisterForm()
