@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.db.models import F
+from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_POST
 from .models import Task
@@ -57,6 +58,27 @@ def update(request, pk):
         task.save()
 
     return redirect("todolist:index")
+
+
+@login_required
+@require_POST
+def update_api(request, pk):
+    form = UpdateTaskForm(request.POST)
+    if form.is_valid():
+        task = get_object_or_404(Task, id=pk)
+        for field in form.cleaned_data:
+            if field in request.POST:
+                setattr(task, field, form.cleaned_data[field])
+        task.save()
+        if request.headers.get("x-requested-with") == "XMLHttpRequest":
+            return JsonResponse(
+                {"message": "Task updated successfully.", "new_status": task.status}
+            )
+        return redirect("todolist:index")
+    else:
+        if request.headers.get("x-requested-with") == "XMLHttpRequest":
+            return JsonResponse({"errors": form.errors}, status=400)
+        return redirect("todolist:index")
 
 
 @login_required

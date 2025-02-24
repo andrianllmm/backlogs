@@ -1,7 +1,8 @@
-<ul class="{% if not mobile %}kanban-tasks{% endif %} list-unstyled d-flex flex-column gap-2 p-1 rounded-3 h-100"
-    style="min-height: 100px"
-    id="column-{{ status }}">
+<div id="column-{{ status }}"
+     class="{% if not mobile %}kanban-tasks{% endif %} list-unstyled d-flex flex-column gap-2 p-1 rounded-3 h-100"
+     style="min-height: 100px"
+     data-status="{{ status }}">
     {% for task in tasks %}
-        <li class="p-0">{% include "todolist/components/task_card.html" with task=task %}</li>
+        {% include "todolist/components/task_card.html" with task=task %}
     {% endfor %}
-</ul>
+</div>
