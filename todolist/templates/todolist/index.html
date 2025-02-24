@@ -2,7 +2,11 @@
 {% load widget_tweaks %}
 {% block main %}
     {% comment %} Add task {% endcomment %}
-    <div class="mb-3">{% include "todolist/components/add_task_form.html" with form=add_form %}</div>
+    <div class="container float-bottom row justify-content-center align-items-center m-0 p-0">
+        <div class="col-12 col-sm-11 col-md-10 col-lg-9 bg-body rounded shadow-sm p-0 px-1 m-0 mb-1 mb-sm-3">
+            {% include "todolist/components/add_task_form.html" with form=add_form %}
+        </div>
+    </div>
     {% comment %} Kanban {% endcomment %}
     {% include "todolist/components/kanban.html" with tasks=tasks statuses=statuses form=update_form %}
 {% endblock main %}

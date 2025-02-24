@@ -74,6 +74,21 @@
   cursor: grab;
 }
 
+.float-bottom {
+  position: fixed;
+  bottom: 0px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1050;
+  width: 100%;
+}
+
+.indicate-focus-within:focus-within {
+  outline: 0.1rem solid var(--bs-primary);
+  outline-offset: 0px;
+  box-shadow: 0 0 0 0.25rem rgba(var(--bs-primary-rgb), 0.25);
+}
+
 .datepicker {
   display: flex;
   justify-content: center;
