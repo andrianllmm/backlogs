@@ -1,20 +1,25 @@
-{% load widget_tweaks %}
 <form action="{% url 'todolist:index' %}" method="post" id="add-task-form">
     {% csrf_token %}
-    <div class="d-flex gap-2">
+    <div class="d-flex flex-column rounded border p-2 px-3 pt-3">
         {% comment %} Title {% endcomment %}
         <div class="control-group w-100">
-            <div class="position-relative w-100">
-                <div id="add-task-title-field-overlay"
-                     class="form-control position-absolute w-100 h-100 text-transparent overflow-hidden"></div>
-                {% render_field form.title id="add-task-title-field" class+="form-control position-relative bg-transparent" placeholder="Add task" autofocus="autofocus" %}
+            {% include "components/task-title-input.html" with form_field=form.title placeholder="+ Add task" id="add-task-title-field" %}
+        </div>
+        {% comment %} Actions {% endcomment %}
+        <div class="d-flex justify-content-center align-items-center gap-2 w-100">
+            {% comment %} Date {% endcomment %}
+            <div class="control-group">
+                {% include "components/datepicker.html" with name="due_date" id="add-task-due-date-field" %}
             </div>
+            {% comment %} Priority {% endcomment %}
+            <div class="control-group">
+                {% include "components/priority-select.html" with id="add-task-priority-field" default_value=form.priority.field.initial %}
+            </div>
+            {% comment %} Submit {% endcomment %}
+            <button type="submit"
+                    class="ms-auto btn btn-sm btn-unstyle fs-4 text-primary p-0">
+                <i class="bi bi-plus-circle-fill"></i>
+            </button>
         </div>
-        {% comment %} Date {% endcomment %}
-        <div class="control-group">
-            {% render_field form.due_date type="datetime-local" id="add-task-due-date-field" class+="form-control" %}
-        </div>
-        <div class="control-group">{% render_field form.priority id="add-task-priority-field" class+="form-control" %}</div>
-        <button type="submit" class="btn btn-outline-secondary">+</button>
     </div>
 </form>

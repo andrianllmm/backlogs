@@ -1,0 +1,6 @@
+{% load widget_tweaks %}
+<div class="position-relative w-100">
+    <div id="add-task-title-field-overlay"
+         class="form-control borderless p-0 position-absolute w-100 h-100 text-transparent overflow-hidden"></div>
+    {% render_field form_field id=id class+="form-control borderless p-0 position-relative bg-transparent" placeholder=placeholder %}
+</div>

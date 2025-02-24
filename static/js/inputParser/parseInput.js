@@ -23,10 +23,12 @@ export default function parseInput() {
     );
 
     prioritySelect.value = parsedPriority;
+    prioritySelect.dispatchEvent(new Event('change', { bubbles: true }));
     dueDateInput.value =
       parsedDate instanceof Date && !isNaN(parsedDate)
         ? formatDatetimeLocal(parsedDate)
         : '';
+    dueDateInput.dispatchEvent(new Event('change', { bubbles: true }));
 
     overlay.innerHTML = '';
 
@@ -34,6 +36,8 @@ export default function parseInput() {
       ...dateMatches,
       ...(priorityMatch ? [priorityMatch] : []),
     ];
+
+    allMatches.sort((a, b) => a.match.index - b.match.index);
 
     const highlightedTitle = highlightTitle(title, allMatches);
 

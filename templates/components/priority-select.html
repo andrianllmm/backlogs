@@ -1,0 +1,20 @@
+<div class="dropdown dropdown-select" data-input-id="{{ id }}">
+    <button class="btn btn-unstyled p-0" type="button" data-bs-toggle="dropdown">
+        <span class="selected-text d-flex gap-1"></span>
+    </button>
+    <ul class="dropdown-menu">
+        <li>
+            <span class="dropdown-item" data-value="0"><i class="bi bi-flag-fill text-info"></i> Low</span>
+        </li>
+        <li>
+            <span class="dropdown-item" data-value="1"><i class="bi bi-flag-fill text-warning"></i> Medium</span>
+        </li>
+        <li>
+            <span class="dropdown-item" data-value="2"><i class="bi bi-flag-fill text-danger"></i> High</span>
+        </li>
+    </ul>
+    <input type="hidden"
+           name="priority"
+           id="{{ id }}"
+           value="{{ default_value }}">
+</div>

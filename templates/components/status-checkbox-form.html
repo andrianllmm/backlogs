@@ -1,0 +1,7 @@
+<form action="{% url 'todolist:update' pk=pk %}"
+      method="post"
+      class="tristate-form"
+      id="{{ id }}">
+  {% csrf_token %}
+  {% include "components/status-checkbox.html" with status=status %}
+</form>
