@@ -3,6 +3,7 @@ import setupKanban from './kanban/setupKanban.js';
 import dropdownSelect from './dropdownSelect.js';
 import datepicker from './datepicker.js';
 import tristateCheckbox from './tristate-checkbox.js';
+import handleThemeToggle from './handleThemeToggle.js';
 
 document.addEventListener('DOMContentLoaded', function () {
   parseInput();
@@ -10,4 +11,5 @@ document.addEventListener('DOMContentLoaded', function () {
   dropdownSelect();
   datepicker();
   tristateCheckbox();
+  handleThemeToggle();
 });
