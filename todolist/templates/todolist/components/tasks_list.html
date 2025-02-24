@@ -1,12 +1,7 @@
-<ul class="kanban-tasks list-unstyled d-flex flex-column gap-2 p-1 rounded-3 h-100"
+<ul class="{% if not mobile %}kanban-tasks{% endif %} list-unstyled d-flex flex-column gap-2 p-1 rounded-3 h-100"
     style="min-height: 100px"
     id="column-{{ status }}">
     {% for task in tasks %}
-        <li class="p-0">
-            {% comment %} Card {% endcomment %}
-            {% include "todolist/components/task_card.html" with task=task %}
-            {% comment %} Modal {% endcomment %}
-            {% include "todolist/components/task_modal.html" with task=task form=form %}
-        </li>
+        <li class="p-0">{% include "todolist/components/task_card.html" with task=task %}</li>
     {% endfor %}
 </ul>

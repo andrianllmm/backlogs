@@ -22,7 +22,7 @@ export default function setupKanban() {
       draggedTask = null;
     });
 
-    // Desktop Drop Events
+    // Desktop Drop Events on Columns
 
     document.querySelectorAll('.kanban-tasks').forEach((column) => {
       // On drag over (highlight column)
@@ -48,8 +48,40 @@ export default function setupKanban() {
         const statusForm = draggedTask.querySelector('.tristate-form');
         const statusInput = statusForm.querySelector('.tristate-hidden-input');
         const newStatus = column.parentElement.dataset.status;
-        statusInput.value = newStatus;
-        statusForm.submit();
+        if (newStatus !== statusInput.value) {
+          statusInput.value = newStatus;
+          statusForm.submit();
+        }
+      });
+    });
+
+    // Desktop Drop Events on Tabs
+
+    document.querySelectorAll('.kanban-column-tab').forEach((tab) => {
+      // On drag over (highlight tab)
+      tab.addEventListener('dragover', function (event) {
+        event.preventDefault();
+        if (!draggedTask) return;
+        tab.classList.add('text-primary');
+      });
+      // On drag leave (remove highlight)
+      tab.addEventListener('dragleave', function () {
+        tab.classList.remove('text-primary');
+      });
+      // On drop (append task to column and change status)
+      tab.addEventListener('drop', function (event) {
+        event.preventDefault();
+        if (!draggedTask) return;
+        tab.classList.remove('text-primary');
+
+        // Change task status and submit the update form
+        const statusForm = draggedTask.querySelector('.tristate-form');
+        const statusInput = statusForm.querySelector('.tristate-hidden-input');
+        const newStatus = tab.dataset.status;
+        if (newStatus !== statusInput.value) {
+          statusInput.value = newStatus;
+          statusForm.submit();
+        }
       });
     });
 
@@ -85,6 +117,14 @@ export default function setupKanban() {
           col.classList.remove('bg-body-tertiary');
         }
       });
+      // Highlight the tab under the current touch position
+      document.querySelectorAll('.kanban-column-tab').forEach((tab) => {
+        if (targetElem && (targetElem === tab || tab.contains(targetElem))) {
+          tab.classList.add('text-primary');
+        } else {
+          tab.classList.remove('text-primary');
+        }
+      });
     });
 
     // Touch end (unmark task and clear touch offset)
@@ -100,19 +140,40 @@ export default function setupKanban() {
 
       // Identify drop target based on touch location
       const touch = event.changedTouches[0];
-      let dropTarget = document.elementFromPoint(touch.clientX, touch.clientY);
-      dropTarget = dropTarget ? dropTarget.closest('.kanban-tasks') : null;
+      let targetElement = document.elementFromPoint(
+        touch.clientX,
+        touch.clientY
+      );
 
-      if (dropTarget) {
-        dropTarget.appendChild(draggedTask);
-        dropTarget.classList.remove('bg-body-tertiary');
+      let kanbanTabTarget = targetElement
+        ? targetElement.closest('.kanban-column-tab')
+        : null;
 
-        // Change task status and submit the update form
+      let kanbanTasksTarget = targetElement
+        ? targetElement.closest('.kanban-tasks')
+        : null;
+
+      if (kanbanTabTarget) {
         const statusForm = draggedTask.querySelector('.tristate-form');
         const statusInput = statusForm.querySelector('.tristate-hidden-input');
-        const newStatus = dropTarget.parentElement.dataset.status;
-        statusInput.value = newStatus;
-        statusForm.submit();
+        const newStatus = kanbanTabTarget.dataset.status;
+        if (newStatus !== statusInput.value) {
+          statusInput.value = newStatus;
+          statusForm.submit();
+        }
+      }
+
+      if (kanbanTasksTarget) {
+        kanbanTasksTarget.appendChild(draggedTask);
+        kanbanTasksTarget.classList.remove('bg-body-tertiary');
+
+        const statusForm = draggedTask.querySelector('.tristate-form');
+        const statusInput = statusForm.querySelector('.tristate-hidden-input');
+        const newStatus = kanbanTasksTarget.parentElement.dataset.status;
+        if (newStatus !== statusInput.value) {
+          statusInput.value = newStatus;
+          statusForm.submit();
+        }
       }
 
       draggedTask = null;
