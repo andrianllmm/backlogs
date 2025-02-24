@@ -1,14 +1,17 @@
 {% load widget_tweaks %}
 {% load todolist_tags %}
 {% load tz %}
-<div class="modal fade" id="modal-{{ task.id }}" tabindex="-1">
+<div class="modal fade" id="task-modal-{{ task.id }}" tabindex="-1">
     <div class="modal-dialog">
         <form action="{% url 'todolist:update' pk=task.id %}" method="post">
             {% csrf_token %}
             <div class="modal-content">
                 <div class="modal-header">
+                    {% comment %} Status, date, and priority {% endcomment %}
                     <div class="d-flex align-items-center gap-2 w-100">
-                        <div class="control-group">{% include "components/status-checkbox.html" with status=task.status %}</div>
+                        <div class="control-group">
+                            {% include "components/status-checkbox.html" with id="update-status-field" status=task.status %}
+                        </div>
                         <div class="control-group">
                             {% include "components/datepicker.html" with name="due_date" id="update-due-date-field" default_value=task.due_date|localtime|format_datetime_local %}
                         </div>
@@ -22,13 +25,15 @@
                             aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    {% render_field form.title class+="form-control input-unstyled fs-5 mb-1" placeholder="Task title" value=task.title %}
+                    {% comment %} Title and description {% endcomment %}
+                    {% render_field form.title class+="form-control input-unstyled fs-5 mb-1" placeholder="Title" value=task.title %}
                     <textarea name="{{ form.description.name }}"
                               class="form-control input-unstyled"
-                              placeholder="Task description"
+                              placeholder="Description"
                               rows="3">{% if task.description %}{{ task.description }}{% endif %}</textarea>
                 </div>
                 <div class="modal-footer">
+                    {% comment %} Form actions {% endcomment %}
                     <button type="submit"
                             class="btn btn-danger"
                             formaction="{% url 'todolist:delete' pk=task.id %}">Delete</button>

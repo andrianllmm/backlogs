@@ -2,9 +2,13 @@ export default function setupKanban() {
   let draggedTask = null;
   let offsetX = 0;
   let offsetY = 0;
+  const highlightTasksClass = 'bg-body-tertiary';
+  const highlightTabClass = 'text-primary';
 
   // Helper function to update task status via Ajax
   function updateTaskStatus(statusForm) {
+    if (!statusForm) return;
+
     const formData = new FormData(statusForm);
     const statusInput = statusForm.querySelector('.tristate-hidden-input');
     const checkbox = statusForm.querySelector('.tristate-checkbox');
@@ -22,13 +26,13 @@ export default function setupKanban() {
       .then((response) => response.json())
       .then((data) => {
         if (data.message) {
-          let newStatus = parseInt(data.new_status, 10);
+          const newStatus = parseInt(data.new_status, 10);
           checkbox.checked = newStatus === 2;
           checkbox.indeterminate = newStatus === 1;
           checkbox.dispatchEvent(new Event('change', { bubbles: true }));
           statusInput.value = newStatus;
         } else if (data.errors) {
-          console.error('Update failed:', data.errors);
+          console.error('Task status update failed:', data.errors);
         }
       })
       .catch((error) => console.error('Error:', error));
@@ -41,46 +45,48 @@ export default function setupKanban() {
 
     // Begin dragging (mark task and set drag data)
     task.addEventListener('dragstart', function (event) {
-      setTimeout(() => task.classList.add('dragging'), 0);
       draggedTask = event.target;
+      setTimeout(() => task.classList.add('dragging'), 0);
       event.dataTransfer.effectAllowed = 'move';
       event.dataTransfer.setData('text/plain', draggedTask.dataset.taskId);
     });
 
     // End dragging (unmark task and clear drag data)
     task.addEventListener('dragend', function () {
+      if (!draggedTask) return;
       draggedTask.classList.remove('dragging');
       draggedTask = null;
     });
 
     // Desktop Drop Events on Columns
 
-    document.querySelectorAll('.kanban-tasks').forEach((column) => {
+    document.querySelectorAll('.kanban-tasks').forEach((taskList) => {
       // On drag over (highlight column)
-      column.addEventListener('dragover', function (event) {
+      taskList.addEventListener('dragover', function (event) {
         event.preventDefault();
         if (!draggedTask) return;
-        column.classList.add('bg-body-tertiary');
+        taskList.classList.add(highlightTasksClass);
       });
 
       // On drag leave (remove highlight)
-      column.addEventListener('dragleave', function () {
-        column.classList.remove('bg-body-tertiary');
+      taskList.addEventListener('dragleave', function () {
+        taskList.classList.remove(highlightTasksClass);
       });
 
       // On drop (append task to column and change status)
-      column.addEventListener('drop', function (event) {
+      taskList.addEventListener('drop', function (event) {
         event.preventDefault();
         if (!draggedTask) return;
-        column.appendChild(draggedTask);
-        column.classList.remove('bg-body-tertiary');
+
+        taskList.classList.remove(highlightTasksClass);
+        taskList.appendChild(draggedTask);
 
         const statusForm = draggedTask.querySelector('.tristate-form');
         if (statusForm) {
           const statusInput = statusForm.querySelector(
             '.tristate-hidden-input'
           );
-          const newStatus = column.parentElement.dataset.status;
+          const newStatus = taskList.dataset.status;
           if (newStatus !== statusInput.value) {
             statusInput.value = newStatus;
             updateTaskStatus(statusForm);
@@ -89,31 +95,34 @@ export default function setupKanban() {
       });
     });
 
-    // Desktop Drop Events on Tabs
+    // Desktop Drop Events on Tab Headers
 
-    document.querySelectorAll('.kanban-column-tab').forEach((tab) => {
+    document.querySelectorAll('.kanban-col-header-tab').forEach((tabHeader) => {
       // On drag over (highlight tab)
-      tab.addEventListener('dragover', function (event) {
+      tabHeader.addEventListener('dragover', function (event) {
         event.preventDefault();
         if (!draggedTask) return;
-        tab.classList.add('text-primary');
+        tabHeader.classList.add(highlightTabClass);
       });
+
       // On drag leave (remove highlight)
-      tab.addEventListener('dragleave', function () {
-        tab.classList.remove('text-primary');
+      tabHeader.addEventListener('dragleave', function () {
+        tabHeader.classList.remove(highlightTabClass);
       });
+
       // On drop (append task to column and change status)
-      tab.addEventListener('drop', function (event) {
+      tabHeader.addEventListener('drop', function (event) {
         event.preventDefault();
         if (!draggedTask) return;
-        tab.classList.remove('text-primary');
+
+        tabHeader.classList.remove(highlightTabClass);
 
         const statusForm = draggedTask.querySelector('.tristate-form');
         if (statusForm) {
           const statusInput = statusForm.querySelector(
             '.tristate-hidden-input'
           );
-          const newStatus = tab.dataset.status;
+          const newStatus = tabHeader.dataset.status;
           if (newStatus !== statusInput.value) {
             statusInput.value = newStatus;
             updateTaskStatus(statusForm);
@@ -147,21 +156,29 @@ export default function setupKanban() {
 
       // Highlight the column under the current touch position
       let targetElem = document.elementFromPoint(touch.clientX, touch.clientY);
-      document.querySelectorAll('.kanban-tasks').forEach((col) => {
-        if (targetElem && (targetElem === col || col.contains(targetElem))) {
-          col.classList.add('bg-body-tertiary');
+      document.querySelectorAll('.kanban-tasks').forEach((taskList) => {
+        if (
+          targetElem &&
+          (targetElem === taskList || taskList.contains(targetElem))
+        ) {
+          taskList.classList.add(highlightTasksClass);
         } else {
-          col.classList.remove('bg-body-tertiary');
+          taskList.classList.remove(highlightTasksClass);
         }
       });
       // Highlight the tab under the current touch position
-      document.querySelectorAll('.kanban-column-tab').forEach((tab) => {
-        if (targetElem && (targetElem === tab || tab.contains(targetElem))) {
-          tab.classList.add('text-primary');
-        } else {
-          tab.classList.remove('text-primary');
-        }
-      });
+      document
+        .querySelectorAll('.kanban-col-header-tab')
+        .forEach((tabHeader) => {
+          if (
+            targetElem &&
+            (targetElem === tabHeader || tabHeader.contains(targetElem))
+          ) {
+            tabHeader.classList.add(highlightTabClass);
+          } else {
+            tabHeader.classList.remove(highlightTabClass);
+          }
+        });
     });
 
     // Touch end (unmark task and clear touch offset)
@@ -175,52 +192,57 @@ export default function setupKanban() {
       draggedTask.style.left = '';
       draggedTask.style.top = '';
 
+      // Identify drop target based on touch location
       const touch = event.changedTouches[0];
       let targetElement = document.elementFromPoint(
         touch.clientX,
         touch.clientY
       );
+
       let kanbanTabTarget = targetElement
-        ? targetElement.closest('.kanban-column-tab')
+        ? targetElement.closest('.kanban-col-header-tab')
         : null;
       let kanbanTasksTarget = targetElement
         ? targetElement.closest('.kanban-tasks')
         : null;
 
+      // If task is dropped on a tab header
       if (kanbanTabTarget) {
-        const targetColumn = document.querySelector(
+        kanbanTabTarget.classList.remove(highlightTabClass);
+        const targetTasklist = document.querySelector(
           `.kanban-tasks[data-status="${kanbanTabTarget.dataset.status}"]`
         );
-        if (targetColumn) {
-          targetColumn.appendChild(draggedTask);
-        }
 
-        const statusForm = draggedTask.querySelector('.tristate-form');
-        if (statusForm) {
-          const statusInput = statusForm.querySelector(
-            '.tristate-hidden-input'
-          );
-          const newStatus = kanbanTabTarget.dataset.status;
-          if (newStatus !== statusInput.value) {
-            statusInput.value = newStatus;
-            updateTaskStatus(statusForm);
+        if (targetTasklist) {
+          targetTasklist.appendChild(draggedTask);
+
+          const statusForm = draggedTask.querySelector('.tristate-form');
+          if (statusForm) {
+            const statusInput = statusForm.querySelector(
+              '.tristate-hidden-input'
+            );
+            const newStatus = kanbanTabTarget.dataset.status;
+            if (newStatus !== statusInput.value) {
+              statusInput.value = newStatus;
+              updateTaskStatus(statusForm, newStatus);
+            }
           }
         }
       }
-
-      if (kanbanTasksTarget) {
+      // If task is dropped on a task list
+      else if (kanbanTasksTarget) {
+        kanbanTasksTarget.classList.remove(highlightTasksClass);
         kanbanTasksTarget.appendChild(draggedTask);
-        kanbanTasksTarget.classList.remove('bg-body-tertiary');
 
         const statusForm = draggedTask.querySelector('.tristate-form');
         if (statusForm) {
           const statusInput = statusForm.querySelector(
             '.tristate-hidden-input'
           );
-          const newStatus = kanbanTasksTarget.parentElement.dataset.status;
+          const newStatus = kanbanTasksTarget.dataset.status;
           if (newStatus !== statusInput.value) {
             statusInput.value = newStatus;
-            updateTaskStatus(statusForm);
+            updateTaskStatus(statusForm, newStatus);
           }
         }
       }

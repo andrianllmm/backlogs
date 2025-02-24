@@ -1,12 +1,12 @@
 {% load humanize %}
 <div class="kanban-task card cursor-grab" draggable="true">
     <div class="card-body d-flex gap-1 p-2">
-        {% include "components/status-checkbox-form.html" with pk=task.id status=task.status id="status-form-{{ task.id }}" %}
+        {% include "components/status-checkbox-form.html" with pk=task.id status=task.status id="status-form-"|add:task.id %}
         <div class="w-100">
             <button type="button"
                     class="btn btn-unstyled d-flex flex-column align-items-start text-start m-0 p-0 w-100"
                     data-bs-toggle="modal"
-                    data-bs-target="#modal-{{ task.id }}">
+                    data-bs-target="#task-modal-{{ task.id }}">
                 <span class="card-title text-truncate underline-hover m-0 p-0">{{ task.title }}</span>
                 {% if task.due_date %}
                     <small class="{% if task.is_overdue %}text-danger{% else %}text-muted{% endif %} ">{{ task.due_date|naturaltime }}</small>

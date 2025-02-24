@@ -1,11 +1,12 @@
 {% load widget_tweaks %}
 <div class="position-relative w-100">
-    <div id="add-task-title-field-overlay"
+    <div id="{{ id }}-overlay"
          class="form-control borderless p-0 position-absolute w-100 h-100 text-transparent bg-transparent overflow-hidden rounded-0">
     </div>
-    {% render_field form_field id=id class+="form-control borderless p-0 position-relative bg-transparent rounded-0" placeholder=placeholder autofocus=autofocus %}
+    {% render_field form_field id=id class+="form-control borderless p-0 position-relative bg-transparent rounded-0" placeholder="+ Add task (Ctrl + Alt + A)" autofocus=True %}
 </div>
 <script>
+// Focus on hotkey
 document.addEventListener('keydown', function(event) {
     if (event.ctrlKey && event.altKey && event.key.toLowerCase() === 'a') {
         event.preventDefault();

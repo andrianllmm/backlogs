@@ -1,23 +1,19 @@
 {% load todolist_tags %}
 {% comment %} Kanban for desktop {% endcomment %}
-<div class="d-none d-sm-flex kanban-container row justify-content-center gap-3">
+<div class="d-none d-sm-flex kanban-container row gap-3">
     {% for status in statuses %}
-        <div class="kanban-column col p-2 rounded-3"
-             data-status="{{ status.value }}">
-            <h5 class="mb-3">{{ status.label }}</h5>
+        <div class="col">
+            <h5 class="kanban-col-header mb-3" data-status="{{ status.value }}">{{ status.label }}</h5>
             {% include "todolist/components/tasks_list.html" with tasks=tasks|filter_tasks:status.value status=status.value %}
         </div>
     {% endfor %}
 </div>
 {% comment %} Kanban for mobile {% endcomment %}
-<div class="d-flex d-sm-none flex-column kanban-container-mobile">
-    <ul class="nav nav-underline nav-fill mb-3"
-        id="kanban-tabs"
-        role="tablist">
+<div class="d-flex d-sm-none kanban-container-mobile flex-column gap-3">
+    <ul class="nav nav-underline nav-fill" role="tablist">
         {% for status in statuses %}
             <li class="nav-item" role="presentation">
-                <a class="kanban-column-tab nav-link"
-                   id="kanban-column-tab-{{ status.value }}"
+                <a class="kanban-col-header-tab nav-link"
                    href="#column-{{ status.value }}"
                    data-status="{{ status.value }}"
                    type="button"
@@ -25,12 +21,12 @@
             </li>
         {% endfor %}
     </ul>
-    <div class="tab-content" id="kanban-tab-content">
+    <div class="tab-content">
         {% for status in statuses %}
-            <div class="tab-pane"
-                 id="kanban-tab-content-{{ status.value }}"
-                 role="tabpanel">
-                {% include "todolist/components/tasks_list.html" with tasks=tasks|filter_tasks:status.value status=status.value mobile=True %}
+            <div class="tab-pane kanban-tab-pane"
+                 role="tabpanel"
+                 data-status="{{ status.value }}">
+                {% include "todolist/components/tasks_list.html" with tasks=tasks|filter_tasks:status.value status=status.value %}
             </div>
         {% endfor %}
     </div>

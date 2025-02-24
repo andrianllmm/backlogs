@@ -1,49 +1,52 @@
 export default function persistKanbanTabs() {
-  const tabs = document.querySelectorAll('.kanban-column-tab');
-  const tabContent = document.querySelectorAll('.tab-pane');
+  const kanbanContainerMobile = document.querySelector(
+    '.kanban-container-mobile'
+  );
+  if (!kanbanContainerMobile) return;
+
+  const tabHeaders = document.querySelectorAll('.kanban-col-header-tab');
+  const tabPanes = document.querySelectorAll('.kanban-tab-pane');
 
   // On page load, check the URL hash and activate the corresponding tab
-  const activeTab = window.location.hash
+  const activeIndex = window.location.hash
     ? window.location.hash.replace('#', '').replace('column-', '')
     : null;
 
-  if (activeTab) {
+  if (activeIndex) {
     // Deactivate all tabs
-    tabs.forEach((tab) => tab.classList.remove('active'));
-    tabContent.forEach((content) => content.classList.remove('show', 'active'));
+    tabHeaders.forEach((tab) => tab.classList.remove('active'));
+    tabPanes.forEach((content) => content.classList.remove('show', 'active'));
 
     // Activate the corresponding tab and content
-    const activeTabElement = document.querySelector(
-      `#kanban-column-tab-${activeTab}`
+    const activeTab = document.querySelector(
+      `.kanban-col-header-tab[data-status="${activeIndex}"]`
     );
-    const activeContentElement = document.querySelector(
-      `#kanban-tab-content-${activeTab}`
+    const activePane = document.querySelector(
+      `.kanban-tab-pane[data-status="${activeIndex}"]`
     );
 
-    activeTabElement.classList.add('active');
-    activeContentElement.classList.add('show', 'active');
+    activeTab.classList.add('active');
+    activePane.classList.add('show', 'active');
   } else {
-    // If no hash is in the URL, default to the first tab
-    tabs[0].classList.add('active');
-    tabContent[0].classList.add('show', 'active');
+    // Default to the first tab if no hash
+    tabHeaders[0].classList.add('active');
+    tabPanes[0].classList.add('show', 'active');
   }
 
   // Update the URL hash when a tab is clicked
-  tabs.forEach((tab) => {
-    tab.addEventListener('click', function (event) {
+  tabHeaders.forEach((tabHeader) => {
+    tabHeader.addEventListener('click', function (event) {
       event.preventDefault(); // Prevent page reload on tab click
-      const status = tab.dataset.status;
+      const status = tabHeader.dataset.status;
 
       // Deactivate all tabs
-      tabs.forEach((tab) => tab.classList.remove('active'));
-      tabContent.forEach((content) =>
-        content.classList.remove('show', 'active')
-      );
+      tabHeaders.forEach((tab) => tab.classList.remove('active'));
+      tabPanes.forEach((content) => content.classList.remove('show', 'active'));
 
       // Activate the clicked tab and corresponding content
-      tab.classList.add('active');
+      tabHeader.classList.add('active');
       const activeTabContent = document.querySelector(
-        `#kanban-tab-content-${status}`
+        `.kanban-tab-pane[data-status="${status}"]`
       );
       activeTabContent.classList.add('show', 'active');
 

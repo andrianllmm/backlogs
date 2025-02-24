@@ -3,7 +3,7 @@
     <div class="d-flex flex-column indicate-focus-within rounded border p-2 px-3 pt-3">
         {% comment %} Title {% endcomment %}
         <div class="control-group w-100">
-            {% include "components/task-title-input.html" with form_field=form.title placeholder="+ Add task (Ctrl + Alt + A)" id="add-task-title-field" autofocus=True %}
+            {% include "components/task-title-input.html" with form_field=form.title id="add-task-title-field" %}
         </div>
         {% comment %} Actions {% endcomment %}
         <div class="d-flex justify-content-center align-items-center gap-2 w-100">

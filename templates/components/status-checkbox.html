@@ -1,9 +1,11 @@
 <div>
        <input type="hidden"
               name="status"
+              id="{{ id }}"
               class="tristate-hidden-input"
               value="{{ status }}">
        <input type="checkbox"
+              id="{{ id }}-checkbox"
               class="form-check-input tristate-checkbox mt-1 me-1"
               data-initial-status="{{ status }}">
 </div>

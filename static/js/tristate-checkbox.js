@@ -11,15 +11,9 @@ export default function tristateCheckbox() {
 
     function moveTaskToColumn() {
       const task = checkbox.closest('.kanban-task');
-      const newStatus = status;
-      let targetColumn;
-
-      document.querySelectorAll('.kanban-tasks').forEach((column) => {
-        if (column.parentElement.dataset.status == newStatus) {
-          targetColumn = column;
-        }
-      });
-
+      const targetColumn = document.querySelector(
+        `.kanban-tasks[data-status="${status}"]`
+      );
       if (targetColumn && task) {
         targetColumn.appendChild(task);
       }
